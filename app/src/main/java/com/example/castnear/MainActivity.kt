@@ -15,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
+import com.google.firebase.FirebaseApp
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.messaging.FirebaseMessaging
@@ -31,13 +32,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var locationCallBack : LocationCallback
     private lateinit var dbRef : DatabaseReference
     private var currLocation : Location? = null
-    private lateinit var token : String
+    private var token : String = "Hellodfdhdh"
     private lateinit var id : String
     private lateinit var sharedPreferences : SharedPreferences
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        FirebaseApp.initializeApp(this)
         fusedLocationProvider = LocationServices.getFusedLocationProviderClient(this)
         dbRef = FirebaseDatabase.getInstance().getReference("NearLoc")
         latitude = findViewById(R.id.latitude)
@@ -58,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         getCurrentLocation()
     }
 
-    fun checkAndSaveUserId(context: Context) {
+    private fun checkAndSaveUserId(context: Context) {
         sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getString("user_id", null)
         if (userId == null) {
@@ -106,12 +108,13 @@ class MainActivity : AppCompatActivity() {
             }
             if(it.result == null) {
                 Toast.makeText(this, "Null", Toast.LENGTH_SHORT).show()
+                token = "Helloadsddf"
             }
             else {
                 token = it.result
             }
         }
-        val loc = LocationModel(id, currLocation?.latitude.toString(), currLocation?.longitude.toString())
+        val loc = LocationModel(token, currLocation?.latitude.toString(), currLocation?.longitude.toString())
         dbRef.child(id).setValue(loc).addOnCompleteListener {
             Toast.makeText(this, "Data Updated", Toast.LENGTH_SHORT).show()
         }.addOnFailureListener {
