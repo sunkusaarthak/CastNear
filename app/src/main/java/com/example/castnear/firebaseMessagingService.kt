@@ -58,7 +58,6 @@ class firebaseMessagingService: FirebaseMessagingService() {
 
     }
 
-
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         Log.d("Token", token)
