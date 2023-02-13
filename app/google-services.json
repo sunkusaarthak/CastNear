@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "422055172881",
+    "firebase_url": "https://near-cast-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "near-cast",
+    "storage_bucket": "near-cast.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:422055172881:android:2f328786bf707ebec48ab0",
+        "android_client_info": {
+          "package_name": "com.example.castnear"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "422055172881-snkmcb14tkg8492jhlfq9ikk5oc1jhad.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCdUagqKWjO-rCx3fOQZpC9-4g5j4bwr8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "422055172881-snkmcb14tkg8492jhlfq9ikk5oc1jhad.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:422055172881:android:6674d794de821c6ac48ab0",
+        "android_client_info": {
+          "package_name": "com.example.nearcast"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "422055172881-snkmcb14tkg8492jhlfq9ikk5oc1jhad.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCdUagqKWjO-rCx3fOQZpC9-4g5j4bwr8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "422055172881-snkmcb14tkg8492jhlfq9ikk5oc1jhad.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
