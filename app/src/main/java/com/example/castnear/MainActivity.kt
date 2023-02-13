@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity() {
                 super.onLocationResult(p0)
                 currLocation = p0.lastLocation
                 getCurrentLocation()
+
             }
         }
         getCurrentLocation()
