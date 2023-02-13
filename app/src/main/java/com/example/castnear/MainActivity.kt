@@ -3,6 +3,7 @@ package com.example.castnear
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
@@ -14,8 +15,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
+import com.google.firebase.FirebaseApp
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.messaging.FirebaseMessaging
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -27,10 +32,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var locationCallBack : LocationCallback
     private lateinit var dbRef : DatabaseReference
     private var currLocation : Location? = null
+    private var token : String = "Hellodfdhdh"
+    private lateinit var id : String
+    private lateinit var sharedPreferences : SharedPreferences
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        FirebaseApp.initializeApp(this)
         fusedLocationProvider = LocationServices.getFusedLocationProviderClient(this)
         dbRef = FirebaseDatabase.getInstance().getReference("NearLoc")
         latitude = findViewById(R.id.latitude)
@@ -45,35 +54,37 @@ class MainActivity : AppCompatActivity() {
             override fun onLocationResult(p0: LocationResult) {
                 super.onLocationResult(p0)
                 currLocation = p0.lastLocation
-                getCurrentLocation()
-                val id = dbRef.push().key!!
-                val loc = LocationModel(id, currLocation?.latitude.toString(), currLocation?.longitude.toString())
-                dbRef.child(id).setValue(loc).addOnCompleteListener {
-
-                }.addOnFailureListener {
-                    //Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
-                }
+                updateUI()
             }
         }
         getCurrentLocation()
     }
 
+    private fun checkAndSaveUserId(context: Context) {
+        sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getString("user_id", null)
+        if (userId == null) {
+            val currentTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+            val currentTimeStr = currentTime.toString()
+            sharedPreferences.edit().putString("user_id", currentTimeStr).apply()
+            id = currentTimeStr
+        }
+        else {
+            id = userId
+        }
+    }
+
     override fun onResume() {
         super.onResume()
-        getCurrentLocation()
+        //getCurrentLocation()
     }
-    @SuppressLint("SetTextI18n")
+
     private fun getCurrentLocation() {
         if(checkPermission()) {
             if(isLocationEnabled()) {
-                /*fusedLocationProvider.lastLocation.addOnCompleteListener {
-                    val location : Location = it.result*/
                 fusedLocationProvider.requestLocationUpdates(locationRequest,
                 locationCallBack, Looper.getMainLooper())
-                latitude.text = "Latitude: ${currLocation?.latitude}"
-                longitude.text = "Longitude: ${currLocation?.longitude}"
-                //}
-
+                updateUI()
             }
             else {
                 Toast.makeText(this, "Enable Location", Toast.LENGTH_SHORT).show()
@@ -84,6 +95,33 @@ class MainActivity : AppCompatActivity() {
         else {
             requestPermissions()
         }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun updateUI() {
+        //val id = dbRef.push().key.toString()
+        checkAndSaveUserId(this)
+        FirebaseMessaging.getInstance().token.addOnCompleteListener {
+            if (!it.isSuccessful) {
+                //Toast.makeText(this, "Failed to Fetch Firebase Token", Toast.LENGTH_SHORT).show()
+                return@addOnCompleteListener
+            }
+            if(it.result == null) {
+                Toast.makeText(this, "Null", Toast.LENGTH_SHORT).show()
+                token = "Helloadsddf"
+            }
+            else {
+                token = it.result
+            }
+        }
+        val loc = LocationModel(token, currLocation?.latitude.toString(), currLocation?.longitude.toString())
+        dbRef.child(id).setValue(loc).addOnCompleteListener {
+            Toast.makeText(this, "Data Updated", Toast.LENGTH_SHORT).show()
+        }.addOnFailureListener {
+            Toast.makeText(this, "Data Not Updated", Toast.LENGTH_SHORT).show()
+        }
+        latitude.text = "Latitude: ${currLocation?.latitude}"
+        longitude.text = "Longitude: ${currLocation?.longitude}"
     }
 
     private fun requestPermissions() {
