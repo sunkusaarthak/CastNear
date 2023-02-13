@@ -14,6 +14,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import java.util.concurrent.TimeUnit
 
 
@@ -23,12 +25,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var longitude : TextView
     private lateinit var locationRequest : LocationRequest
     private lateinit var locationCallBack : LocationCallback
+    private lateinit var dbRef : DatabaseReference
     private var currLocation : Location? = null
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         fusedLocationProvider = LocationServices.getFusedLocationProviderClient(this)
+        dbRef = FirebaseDatabase.getInstance().getReference("NearLoc")
         latitude = findViewById(R.id.latitude)
         longitude = findViewById(R.id.longitude)
         locationRequest = LocationRequest.create().apply{
@@ -42,7 +46,13 @@ class MainActivity : AppCompatActivity() {
                 super.onLocationResult(p0)
                 currLocation = p0.lastLocation
                 getCurrentLocation()
+                val id = dbRef.push().key!!
+                val loc = LocationModel(id, currLocation?.latitude.toString(), currLocation?.longitude.toString())
+                dbRef.child(id).setValue(loc).addOnCompleteListener {
 
+                }.addOnFailureListener {
+                    //Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
+                }
             }
         }
         getCurrentLocation()
