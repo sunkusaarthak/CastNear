@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -58,6 +59,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
         getCurrentLocation()
+        findViewById<Button>(R.id.notify).setOnClickListener {
+            val intent = Intent(applicationContext, BroadCastMessage::class.java)
+            intent.putExtra("location", currLocation)
+            startActivity(intent)
+        }
     }
 
     private fun checkAndSaveUserId(context: Context) {

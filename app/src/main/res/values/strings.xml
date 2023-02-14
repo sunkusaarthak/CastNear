@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Cast Near</string>
     <string name="title_activity_notify">NotifyActivity</string>
     <!-- Strings used for fragments for navigation -->
@@ -10,4 +10,9 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="textview">TextView</string>
+    <string name="send_notification">Send Notification</string>
+    <string name="latitude">Latitude:</string>
+    <string name="longitude">Longitude:</string>
+    <string name="notify">Notify</string>
+    <string name="Key" tools:ignore="Typos">AAAAYkRy2xE:APA91bGBmbGLpCqEog0iWPPzLaGjDX-aoi0tj4gY_vl_i3ay8Weln0obJG4URNS_FKpV4av6CunEWN1-BqhhrVqgmIq5sbDaSb8POgKAqJJmLqqoBkbfh5eOWqGnkukZ8kP-Mxcqph1H</string>
 </resources>
