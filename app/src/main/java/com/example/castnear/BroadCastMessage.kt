@@ -35,7 +35,8 @@ class BroadCastMessage : AppCompatActivity() {
                     }
                 }
 
-
+                val data = Data("Hi There!", "This is just for Fun Beta!")
+                sendNotificationToMultipleUsers(userList, data)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -60,21 +61,16 @@ class BroadCastMessage : AppCompatActivity() {
         return r * c
     }
 
-    fun sendNotificationToMultipleUsers(tokens: ArrayList<String>) {
+    fun sendNotificationToMultipleUsers(tokens: ArrayList<String>, data : Data) {
         for (token in tokens) {
-            val data = Data(
-                title = "Notification title",
-                message = "Notification message"
-            )
-
-            /*val sender = Sender(token, data)
-            FirebaseMessaging.getInstance().send(sender)
-                .addOnSuccessListener {
-                    Log.d("FCM", "Notification sent successfully")
-                }
-                .addOnFailureListener {
-                    Log.d("FCM", "Failed to send notification")
-                }*/
+            FirebaseNotificationSender(
+                getString(R.string.Key),
+                token,
+                data.title,
+                data.message,
+                applicationContext,
+                this
+            ).sendNotifications()
         }
     }
 }

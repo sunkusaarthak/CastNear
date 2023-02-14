@@ -4,7 +4,10 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
+import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Build
+import android.os.Vibrator
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -20,12 +23,21 @@ class firebaseMessagingService: FirebaseMessagingService() {
     }
 
     private fun pushNotification(title: String?, body: String?) {
+        val notification: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        val r = RingtoneManager.getRingtone(applicationContext, notification)
+        r.play()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            r.isLooping = false
+        }
+        val v = getSystemService(VIBRATOR_SERVICE) as Vibrator
+        val pattern = longArrayOf(100, 300, 300, 300)
+        v.vibrate(pattern, -1)
         notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         val intent = Intent(this, AfterNotifyActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val pendingIntent: PendingIntent = PendingIntent.getActivity(this,
-            0, intent, PendingIntent.FLAG_IMMUTABLE)
+            0, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "Custom Channel"
             val descriptionText = "Channel for Push Notification"
@@ -42,7 +54,7 @@ class firebaseMessagingService: FirebaseMessagingService() {
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .build()
-            notificationManager.notify(1, builder)
+            notificationManager.notify(100, builder)
         }
         else {
             val builder = NotificationCompat.Builder(this)
@@ -53,7 +65,7 @@ class firebaseMessagingService: FirebaseMessagingService() {
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .build()
-            notificationManager.notify(1, builder)
+            notificationManager.notify(100, builder)
         }
 
     }
