@@ -18,6 +18,7 @@ class BroadCastMessage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_broad_cast_message)
+        supportActionBar?.hide()
         val location : Location? = intent.getParcelableExtra<Location>("location")
         dbRef = FirebaseDatabase.getInstance().getReference("NearLoc")
         userList = ArrayList()

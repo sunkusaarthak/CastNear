@@ -7,10 +7,14 @@
     tools:context=".BroadCastMessage">
 
     <Button
+        style="@style/Widget.Material3.Button.ElevatedButton"
         android:id="@+id/send"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/send_notification"
+        android:layout_margin="16dp"
+        android:padding="16dp"
+        android:textSize="26sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
