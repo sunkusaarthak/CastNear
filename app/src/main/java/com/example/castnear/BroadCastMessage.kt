@@ -4,6 +4,8 @@ import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
+import android.widget.Toast
 import com.google.firebase.database.*
 import java.lang.Math.*
 import kotlin.math.pow
@@ -18,32 +20,34 @@ class BroadCastMessage : AppCompatActivity() {
         setContentView(R.layout.activity_broad_cast_message)
         val location : Location? = intent.getParcelableExtra<Location>("location")
         dbRef = FirebaseDatabase.getInstance().getReference("NearLoc")
-        dbRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                for(ds in dataSnapshot.children) {
-                    //userList.add(ds.child("id").toString())
-                    val lat = ds.child("latitude").toString().toDouble()
-                    val lon = ds.child("longitude").toString().toDouble()
-
-                    val currLat = location?.latitude.toString().toDouble()
-                    val currLon = location?.longitude.toString().toDouble()
-                    val disKm = distance(currLat, currLon, lat, lon)
-                    if(disKm <= 3) {
-                        userList.add(ds.child("id").toString())
+        userList = ArrayList()
+        findViewById<Button>(R.id.send).setOnClickListener {
+            dbRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    for(ds in dataSnapshot.children) {
+                        //userList.add(ds.child("id").toString())
+                        val lat : String = ds.child("latitude").value.toString()
+                        val lon : String = ds.child("longitude").value.toString()
+                        val latitude : Double = lat.toDouble()
+                        val longitude : Double = lon.toDouble()
+                        val currLat = location?.latitude
+                        val currLon = location?.longitude
+                        val disKm = distance(currLat!!, currLon!!, latitude, longitude)
+                        if(disKm <= 3) {
+                            userList.add(ds.child("id").value.toString())
+                        }
                     }
+
+                    val data = Data("Hi There!", "This is just for Fun Beta!")
+                    sendNotificationToMultipleUsers(userList, data)
                 }
 
-                val data = Data("Hi There!", "This is just for Fun Beta!")
-                sendNotificationToMultipleUsers(userList, data)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                // Failed to read value
-                Log.w("TAG", "Failed to read value.", error.toException())
-            }
-        })
+                override fun onCancelled(error: DatabaseError) {
+                    // Failed to read value
+                    Log.w("TAG", "Failed to read value.", error.toException())
+                }
+            })
+        }
     }
 
     fun distance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
@@ -72,5 +76,6 @@ class BroadCastMessage : AppCompatActivity() {
                 this
             ).sendNotifications()
         }
+        Toast.makeText(this, "Notification Send Successfully", Toast.LENGTH_SHORT).show()
     }
 }
