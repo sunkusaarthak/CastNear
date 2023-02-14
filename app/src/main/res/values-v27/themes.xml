@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Base application theme. -->
+
     <style name="Theme.CastNear" parent="Theme.Material3.DayNight">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/material_dynamic_primary50</item>
@@ -13,13 +14,8 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:statusBarColor">@color/material_dynamic_primary99</item>
         <!-- Customize your theme here. -->
+        <item name="android:windowLightNavigationBar">true</item>
         <item name="android:navigationBarColor">@color/material_dynamic_primary99</item>
         <item name="fontFamily">@font/googlefont</item>
     </style>
-    <style name="Theme.CastNear.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-    <style name="Theme.CastNear.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-    <style name="Theme.CastNear.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
