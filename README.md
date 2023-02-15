@@ -41,7 +41,7 @@ To use this app, follow these steps:
 
 The app has the following directory structure:
 
-- `app/src/main/java/com/example/myapp/` - contains the Java source code for the app
+- `app/src/main/java/com/example/castneat/` - contains the Java source code for the app
 - `app/src/main/res/layout/` - contains the XML layout files for the app's user interface
 - `app/src/main/res/values/` - contains XML files that define values used throughout the app
 
